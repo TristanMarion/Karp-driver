@@ -5,18 +5,11 @@
 
 #define DEVICE "/dev/samynaceri"
 
-int main(void){
+void affich(){
 	int i, fd;
 	char ch, write_buf[100], read_buf[100];
 
 	fd = open(DEVICE, O_RDWR);
-
-	if(fd == -1){
-			printf("file %s n'existe pas ou vous n'avez pas les permissions pour faire ca\n", DEVICE);
-			exit(-1);
-	}
-	printf ("r = Affiche le contenu du device\nw = Ecrire du contenu dan le device\nd = Vide le device\nVotre commande : ");
-	scanf("%c", &ch);
 
 	switch (ch) {
 			case 'k':
@@ -40,5 +33,22 @@ int main(void){
 					break;		
 	}
 	close(fd);
+}
+
+int main(void){
+	int i, fd;
+	char ch, write_buf[100], read_buf[100];
+
+	fd = open(DEVICE, O_RDWR);
+
+	if(fd == -1){
+			printf("file %s n'existe pas ou vous n'avez pas les permissions pour faire ca\n", DEVICE);
+			exit(-1);
+	}
+	printf ("Choisissez dans quelle partition vous souhaitez faire des trucs :\n - 1\n- 2\n- 3\n");
+	printf ("r = Affiche le contenu du device\nw = Ecrire du contenu dan le device\nd = Vide le device\nVotre commande : ");
+	scanf("%c", &ch);
+	affich();
+
 	return 0;
 }
