@@ -19,6 +19,9 @@ int main(void){
 	scanf("%c", &ch);
 
 	switch (ch) {
+			case 'k':
+					printf("La grande lettre ce referant, a un maitre seigneur des arts occultes et du tilt\n");
+					break;
 			case 'w':
 					printf("Rentrer votre contenu :");
 					scanf(" %[^\n]", write_buf);
