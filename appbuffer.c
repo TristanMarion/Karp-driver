@@ -30,6 +30,7 @@ int main(void){
 					break;
 			case 'd':
 					write(fd, NULL, sizeof(NULL));
+					printf("device vidé\n");
 					break;
 			default:
 					printf("Commande non reconnues\n");
