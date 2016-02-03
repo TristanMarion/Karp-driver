@@ -6,17 +6,19 @@
 #include <asm/uaccess.h>   //copy to/from user
 
 struct device {
-  char data[100];
+  char data[1000];
   struct semaphore sem; // prevent corruption
 } virtual_device;
 
-struct cdev *mcdev;
-int major_number; // variable pour stocker nombres
+// On declare les variables en global pour eviter de saturer la statck du kernel
+
+struct cdev *my_cdev;
+int major_number; // variable pour garder nombres majeurs extrait
 int ret; //variable pour return
 
-dev_t dev_num;
+dev_t dev_num; // stop les nombres majeurs
 
-#define DEVICE_NAME	 	"testdevice"
+#define DEVICE_NAME	 	"samynaceri"
 
 int device_open(struct inode *inode, struct file *filp){
   if (down_interruptible(&virtual_device.sem) != 0){
@@ -54,36 +56,32 @@ struct file_operations fops = {
   .read = device_read
 };
 
-static int driver_entry(void){
-  ret = alloc_chrdev_region(&dev_num,0,1,DEVICE_NAME);
+static int driver_entry(void){ // point d'entree 
+  ret = alloc_chrdev_region(&dev_num,0,1,DEVICE_NAME); //allocation dynamique
   if (ret < 0){
     printk(KERN_ALERT "test device : erreur d'allocation");
     return ret;
   }
-  major_number = MAJOR(dev_num);
+  major_number = MAJOR(dev_num); //extraction des nombres majeurs avec la macro MAJOR
   printk(KERN_INFO "test device : le nombre majeur est %d", major_number);
   printk(KERN_INFO "\tuse \"mknod /dev/%s c %d 0\" for device file",DEVICE_NAME,major_number);  //dmesg
-  
-  mcdev = cdev_alloc();
-  mcdev->ops = &fops;
-  mcdev->owner = THIS_MODULE;
-  
-  ret = cdev_add(mcdev, dev_num, 1);
+  my_cdev = cdev_alloc();  // creation de la structure cdev
+  my_cdev->ops = &fops; 
+  my_cdev->owner = THIS_MODULE;
+  ret = cdev_add(my_cdev, dev_num, 1); //on add cdev au kernel
   if (ret < 0){
     printk(KERN_ALERT "test device : impossible d'add cdev au kernel");
     return ret;
   }
-  
-  sema_init(&virtual_device.sem,1);
-  
+  sema_init(&virtual_device.sem,1); // initialisation du semaphore, il permet de synchro l'acces aux ressources
   return 0;
 }
 
 static void driver_exit(void){
-  cdev_del(mcdev);
-  unregister_chrdev_region(dev_num, 1);
+  cdev_del(my_cdev); // on del cdev du kernel
+  unregister_chrdev_region(dev_num, 1); // on free le alloc_chrdev_region
   printk(KERN_ALERT "test device: unloaded module");
 }
 
-module_init(driver_entry);
-module_exit(driver_exit);
+module_init(driver_entry); //on precise au module ou commencer
+module_exit(driver_exit); // et ou finir
