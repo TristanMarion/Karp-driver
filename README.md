@@ -1,12 +1,12 @@
-Nous sommes la Karparmy
+Nous sommes la Karparmy et ceci est notre driver :
 
-Pour faire fonctionner le 1er driver : 
+Pour faire fonctionner le driver : 
 
 1) make 
 
 2) insmod module.ko
 
-3) mknod /dev/testdevice c 250 0
+3) mknod /dev/samynaceri c 250 0
 
 4) gcc -o appbuffer appbuffer.c
 
