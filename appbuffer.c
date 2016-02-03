@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <string.h>
 
-#define DEVICE "/dev/testdevice"
+#define DEVICE "/dev/samynaceri"
 
 int main(void){
 	int i, fd;
