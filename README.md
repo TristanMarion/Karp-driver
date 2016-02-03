@@ -6,7 +6,7 @@ Pour faire fonctionner le 1er driver :
 
 2) insmod module.ko
 
-3) mknod /ect/testdevice c 250 0
+3) mknod /dev/testdevice c 250 0
 
 4) gcc -o appbuffer appbuffer.c
 
