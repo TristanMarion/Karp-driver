@@ -20,7 +20,7 @@ int main(void)
   printf("\nr = Afficher le contenu du buffer\n");
   printf("w = Écrire dans le buffer\n");
   printf("d = Vider le buffer\n");
-  printf("a = Ajouter du contenu au buffer\n\n")
+  printf("a = Ajouter du contenu au buffer\n\n");
   printf("Votre commande : ");
   scanf("%c", &ch);
   
